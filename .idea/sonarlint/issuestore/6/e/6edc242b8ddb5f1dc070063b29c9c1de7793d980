@@ -1,0 +1,8 @@
+
+fsquid:S4488:"JReplace "@RequestMapping(method = RequestMethod.POST)" with "@PostMapping"(ÌıŸ®şÿÿÿÿ
+asquid:S4488k"JReplace "@RequestMapping(method = RequestMethod.POST)" with "@PostMapping"(½Ö±
+bsquid:S4488°"JReplace "@RequestMapping(method = RequestMethod.POST)" with "@PostMapping"(ÿÀòØ
+_squid:S1192)"IDefine a constant instead of duplicating this literal "currUser" 7 times.(µ¡¾X
+bsquid:S1192-"KDefine a constant instead of duplicating this literal "redirect:/" 7 times.(äÔ¶½
+squid:S1488Ü"dImmediately return this expression instead of assigning it to the temporary variable "passwordHash".(³ßÀïùÿÿÿÿ
+rsquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÆÇÛ›

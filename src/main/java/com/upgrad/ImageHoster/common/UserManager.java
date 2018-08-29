@@ -134,5 +134,13 @@ public class UserManager extends SessionManager {
             return null;
         }
     }
+
+    public static void main(String[] args) {
+        String manoj = "manoj";
+        String hashOfEnteredPassword = Hashing.sha256()
+                .hashString(manoj)
+                .toString();
+        System.out.println(hashOfEnteredPassword);
+    }
 }
 

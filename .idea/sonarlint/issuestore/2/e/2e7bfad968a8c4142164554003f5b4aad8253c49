@@ -1,0 +1,5 @@
+
+9squid:S1643…"Use a StringBuilder instead.(Ã±ìéøÿÿÿÿ
+bsquid:S1192D"KDefine a constant instead of duplicating this literal "redirect:/" 3 times.(äÔ¶½
+qsquid:S2293â"YReplace the type specification in this constructor call with the diamond operator ("<>").(ó¿œÑ
+rsquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÆÇÛ›
