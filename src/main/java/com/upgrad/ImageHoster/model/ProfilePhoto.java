@@ -1,6 +1,6 @@
 package com.upgrad.ImageHoster.model;
 
-import org.hibernate.annotations.Entity;
+
 
 import javax.persistence.*;
 import java.io.Serializable;

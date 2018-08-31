@@ -7,6 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+
 import java.util.List;
 
 @SuppressWarnings("unchecked")
@@ -27,21 +28,20 @@ public class ImageManager extends SessionManager {
     /**
      * This method retrieves an image by its title
      *
-     * @param title the title of the image that we are looking for
-     *
+     * @param id the title of the image that we are looking for
      * @return an Image object that we retrieved by its title
      */
-    public Image getImageByTitle(final String title) {
+    public Image getImageById(final String id) {
         Session session = openSession();
 
         try {
-            Image image = (Image)session.createCriteria(Image.class)
-                    .add(Restrictions.eq("title", title))
+            Image image = (Image) session.createCriteria(Image.class)
+                    .add(Restrictions.eq("id", Integer.valueOf(id)))
                     .uniqueResult(); // retrieves only 1 image
             commitSession(session);
 
             return image;
-        } catch(HibernateException e) {
+        } catch (HibernateException e) {
             System.out.println("unable to retrieve an image from database by its title");
         }
 
@@ -52,16 +52,15 @@ public class ImageManager extends SessionManager {
      * This method retrieves an image by its title, as well as the data
      * related to its tags, user, and user's profile photo
      *
-     * @param title the title of the image that we are looking for
-     *
+     * @param id the title of the image that we are looking for
      * @return an Image object that we retrieved by its title
      */
-    public Image getImageByTitleWithJoins(final String title) {
+    public Image getImageByIdWithJoins(final String id) {
         Session session = openSession();
 
         try {
-            Image image = (Image)session.createCriteria(Image.class)
-                    .add(Restrictions.eq("title", title))
+            Image image = (Image) session.createCriteria(Image.class)
+                    .add(Restrictions.eq("id", Integer.valueOf(id)))
                     .uniqueResult();
             Hibernate.initialize(image.getTags()); // doing a join on tags table
             Hibernate.initialize(image.getUser()); // doing a join on user table
@@ -69,18 +68,18 @@ public class ImageManager extends SessionManager {
             commitSession(session);
 
             return image;
-        } catch(HibernateException e) {
+        } catch (HibernateException e) {
             System.out.println("unable to retrieve an image from database by its title");
         }
 
         return null;
     }
 
+
     /**
      * This method retrieves an image by a specific tag.
      *
      * @param tagName the tag that we want to retrieve images by
-     *
      * @return a list of Image objects that we retrieved by its tag
      */
     public List<Image> getImagesByTag(final String tagName) {
@@ -96,7 +95,7 @@ public class ImageManager extends SessionManager {
             commitSession(session);
 
             return images;
-        } catch(HibernateException e) {
+        } catch (HibernateException e) {
             System.out.println("unable to retrieve an image from database by its title");
         }
 
@@ -122,12 +121,12 @@ public class ImageManager extends SessionManager {
     /**
      * This method deletes an image data from the database
      *
-     * @param title the title of the image that we want to delete
+     * @param id the title of the image that we want to delete
      */
-    public void deleteImage(final String title) {
+    public void deleteImage(final String id) {
         Session session = openSession();
-        Query query = session.createQuery("Delete from " + Image.class.getName() + " where title=:imageTitle");
-        query.setParameter("imageTitle", title);
+        Query query = session.createQuery("Delete from " + Image.class.getName() + " where id=:id");
+        query.setParameter("id", Integer.valueOf(id));
         query.executeUpdate();
         commitSession(session);
     }
@@ -152,5 +151,28 @@ public class ImageManager extends SessionManager {
         Session session = openSession();
         session.update(updatedImage);
         commitSession(session);
+    }
+
+    /**
+     * This method retrieves an image by its primary key id field
+     *
+     * @param id the title of the image that we are looking for
+     * @return an Image object that we retrieved by its title
+     */
+    public Image getImageById(final int id) {
+        Session session = openSession();
+
+        try {
+            Image image = (Image) session.createCriteria(Image.class)
+                    .add(Restrictions.eq("id", id))
+                    .uniqueResult(); // retrieves only 1 image
+            commitSession(session);
+
+            return image;
+        } catch (HibernateException e) {
+            System.out.println("unable to retrieve an image from database by its title");
+        }
+
+        return null;
     }
 }
