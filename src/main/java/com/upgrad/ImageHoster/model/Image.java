@@ -46,6 +46,9 @@ public class Image implements Serializable{
     private List<Tag> tags = new ArrayList<Tag>();
 
 
+
+
+
     public Image() { }
 
     public Image(String title, String description, String imageFile, User user, List<Tag> tags) {

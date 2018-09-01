@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.*;
-import java.util.Base64;
+import java.util.*;
 
 
 @Controller
@@ -62,18 +62,42 @@ public class UserController {
         ProfilePhoto photo = new ProfilePhoto();
         profilePhotoService.save(photo);
 
+        //create a hashmap of errors to display
+        Map<String, String> errorMap = new HashMap<String, String>();
+        //Before we start the method, we should first clear any earlier errors.
+        model.addAttribute("errors", errorMap);
+        List<String> userErrorList = new ArrayList<String>();
+
         // it is good security practice to store the hash version of the password
         // in the database. Therefore, if your a hacker gains access to your
         // database, the hacker cannot see the password for your users
         String passwordHash = hashPassword(password);
         User user = new User(username, passwordHash, photo);
 
+        String userError = "";
+        String pdError = "";
+
+        //Check to see if username ad password are valid
+        if (!isUserNameValid(username)) {
+            userError = "username should be 6 characters or longer";
+            errorMap.put("username", userError);
+            model.addAttribute("errors", errorMap);
+
+            if (!isPwdValid(password)) {
+                pdError = "password should be 6 characters or longer";
+                errorMap.put("password", pdError);
+                model.addAttribute("errors", errorMap);
+            }
+            return "users/signup";
+        }
+
 
         if (userService.getByName(username) != null) {
             //that means there is a user already with this username
             //Hence, display message
-            String error = "username has been previously registered. Please use another username";
-            model.addAttribute("error", error);
+            userError = "username has been previously registered. Please use another username";
+            errorMap.put("username", userError);
+            model.addAttribute("errors", errorMap);
             return "users/signup";
         } else {
             userService.register(user);
@@ -88,6 +112,44 @@ public class UserController {
     }
 
     /**
+     * method used to check if password is more than 6 characters or long.
+     *
+     * @param password string denoting the password
+     * @return whether the password length is correct or not
+     */
+    private boolean isPwdValid(String password) {
+        boolean valid = false;
+        if (isStringValid(password)) {
+            valid = true;
+        }
+        return valid;
+    }
+
+    /**
+     * method used to check if password is more than 6 characters or long.
+     *
+     * @param username string denoting the username
+     * @return whether the username length is correct or not
+     */
+    private boolean isUserNameValid(String username) {
+        boolean valid = false;
+        if (isStringValid(username)) {
+            valid = true;
+        }
+        return valid;
+    }
+
+    /**
+     * method to check if the string is valid as per the 6 character criteria.
+     *
+     * @param strVal username or password value
+     * @return boolean indicating validity f the string.
+     */
+    private boolean isStringValid(String strVal) {
+        return strVal != null && !strVal.trim().isEmpty() && strVal.length() >= 6;
+    }
+
+    /**
      * This method render the user signin form
      *
      * @param session HTTP session to check if the user has logged in
@@ -97,6 +159,7 @@ public class UserController {
     public String signIn(HttpSession session) {
         // render the sign in view on only if the user is not logged in
         if (session.getAttribute("currUser") == null) {
+
             return "users/signin";
         } else {
             return "redirect:/";
@@ -131,6 +194,7 @@ public class UserController {
             // and password, return a sign in error
             String error = "incorrect username or password";
             model.addAttribute("error", error);
+
 
             return "users/signin";
         }
