@@ -54,14 +54,15 @@
           th:if="${session.currUser}">
         <fieldset id="sign_up" class="ba b--transparent ph0 mh0">
             <div class="mt3">
-                <label class="db fw6 lh-copy f6" for="comment">Write a comment</label>
-                <textarea class="pa2 input-reset ba w-100" rows="5" name="comment" id="comment"></textarea>
+                <label class="db fw6 lh-copy f6" for="comments">Write a comments</label>
+                <textarea class="pa2 input-reset ba w-100" rows="5" name="comments" id="comments"></textarea>
             </div>
         </fieldset>
         <div>
             <input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit"
                    value="Submit">
         </div>
+        <input class="pa2 input-reset ba w-100" type="hidden" name="id" id="id" th:value="${image.id}" />
     </form>
     <div class="comments mt5">
         <article class="ba b--black-10 mv4" th:each="comment : ${comments}">

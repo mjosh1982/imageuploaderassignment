@@ -1,5 +1,6 @@
 package com.upgrad.ImageHoster.service;
 
+import com.upgrad.ImageHoster.model.Comment;
 import com.upgrad.ImageHoster.model.Image;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface ImageService {
     void save(Image image);
 
     void update(Image image);
+
+    void saveComment(Comment comment);
 }

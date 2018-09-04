@@ -11,14 +11,17 @@
         <property name="hibernate.connection.pool_size">1</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgresPlusDialect</property>
         <property name="hibernate.current_session_context_class">managed</property>
+        <property name="show_sql">true</property>
 
         <!-- run once: tell hibernate create our tables in database-->
         <!--<property name="hbm2ddl.auto">create</property>-->
+        <!--<property name="hbm2ddl.auto">update</property>-->
 
         <!--Entity classes to be created as tables in database-->
-        <!--<mapping class="com.upgrad.ImageHoster.model.User"/>-->
-        <!--<mapping class="com.upgrad.ImageHoster.model.Image"/>-->
-        <!--<mapping class="com.upgrad.ImageHoster.model.Tag"/>-->
-        <!--<mapping class="com.upgrad.ImageHoster.model.ProfilePhoto"/>-->
+        <mapping class="com.upgrad.ImageHoster.model.User"/>
+        <mapping class="com.upgrad.ImageHoster.model.Image"/>
+        <mapping class="com.upgrad.ImageHoster.model.Comment"/>
+        <mapping class="com.upgrad.ImageHoster.model.Tag"/>
+        <mapping class="com.upgrad.ImageHoster.model.ProfilePhoto"/>
     </session-factory>
 </hibernate-configuration>

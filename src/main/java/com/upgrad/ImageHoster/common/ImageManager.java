@@ -1,5 +1,6 @@
 package com.upgrad.ImageHoster.common;
 
+import com.upgrad.ImageHoster.model.Comment;
 import com.upgrad.ImageHoster.model.Image;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -174,5 +175,16 @@ public class ImageManager extends SessionManager {
         }
 
         return null;
+    }
+
+    /**
+     * This method is used for saving comments for the image
+     *
+     * @param comment comment parameter
+     */
+    public void saveComment(Comment comment) {
+        Session session = openSession();
+        session.save(comment);
+        commitSession(session);
     }
 }

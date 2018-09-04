@@ -1,5 +1,6 @@
 package com.upgrad.ImageHoster.controller;
 
+import com.upgrad.ImageHoster.model.Comment;
 import com.upgrad.ImageHoster.model.Image;
 import com.upgrad.ImageHoster.model.Tag;
 import com.upgrad.ImageHoster.model.User;
@@ -17,10 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 
 @Controller
@@ -37,8 +35,8 @@ public class ImageController {
     /**
      * This controller method returns all the images that have been
      * uploaded to the website
-     * @param model used to pass data to the view for rendering
      *
+     * @param model used to pass data to the view for rendering
      * @return the homepage view
      */
     @RequestMapping("/")
@@ -54,7 +52,6 @@ public class ImageController {
      *
      * @param session a HTTP session that tells us if the current user
      *                is logged in
-     *
      * @return the image upload form view
      */
     @RequestMapping("/images/upload")
@@ -64,10 +61,9 @@ public class ImageController {
 
         // currUser is null means that the user is not logged in
         // therefore redirect the user back to the home page
-        if(currUser == null ){
+        if (currUser == null) {
             return "redirect:/";
-        }
-        else {
+        } else {
             return "images/upload";
         }
     }
@@ -76,14 +72,12 @@ public class ImageController {
      * This controller method retrieves the data that the user entered
      * into the image uploader form, and creates an image
      *
-     * @param title title of the uploaded image
+     * @param title       title of the uploaded image
      * @param description description of the uploaded image
-     * @param file the image to be uploaded
-     * @param tags tags (i.e. categories) for the images
-     * @param session HTTP session that tells us if the user is logged in
-     *
+     * @param file        the image to be uploaded
+     * @param tags        tags (i.e. categories) for the images
+     * @param session     HTTP session that tells us if the user is logged in
      * @return view for the uploaded image
-     *
      * @throws IOException
      */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -95,10 +89,9 @@ public class ImageController {
         User currUser = (User) session.getAttribute("currUser");
 
         // if the user is not logged in, redirect to the home page
-        if(currUser == null ){
+        if (currUser == null) {
             return "redirect:/";
-        }
-        else {
+        } else {
             List<Tag> imageTags = findOrCreateTags(tags);
             String uploadedImageData = convertUploadedFileToBase64(file);
 
@@ -111,9 +104,9 @@ public class ImageController {
 
     /**
      * This controller shows a specific image
-     * @param id the id of the image that we want to retrieve
-     * @param model used to pass data to the view for rendering
      *
+     * @param id    the id of the image that we want to retrieve
+     * @param model used to pass data to the view for rendering
      * @return view for the image that was requested
      */
     @RequestMapping("/images/{id}")
@@ -125,6 +118,10 @@ public class ImageController {
         model.addAttribute("user", image.getUser());
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
+        model.addAttribute("id",image.getId());
+        if (image.getComments() != null && image.getComments().size() > 0) {
+            model.addAttribute("comments", image.getComments());
+        }
 
         return "images/image";
     }
@@ -133,7 +130,6 @@ public class ImageController {
      * This method deletes a specific image from the database
      *
      * @param id id of the image that we want to delete
-     *
      * @return redirects the user to the homepage view
      */
     @RequestMapping("/images/{id}/delete")
@@ -149,9 +145,8 @@ public class ImageController {
      * This controller method displays an image edit form, so the user
      * can update the image's description and uploaded file
      *
-     * @param id id of the image that we want to edit
+     * @param id    id of the image that we want to edit
      * @param model used to pass data to the view for rendering
-     *
      * @return the image edit form view
      */
     @RequestMapping("/images/{id}/edit")
@@ -161,6 +156,7 @@ public class ImageController {
 
         model.addAttribute("image", image);
         model.addAttribute("tags", tags);
+        model.addAttribute("comments", image.getComments());
 
         return "images/edit";
     }
@@ -168,13 +164,11 @@ public class ImageController {
     /**
      * This controller method updates the image that we wanted to edit
      *
-     * @param id id of the image that we want to edit
+     * @param id          id of the image that we want to edit
      * @param description the updated description for the image
-     * @param file the updated file for the image
-     * @param tags the updated tags for the image
-     *
+     * @param file        the updated file for the image
+     * @param tags        the updated tags for the image
      * @return the view for the updated image
-     *
      * @throws IOException
      */
     @RequestMapping(value = "/editImage", method = RequestMethod.POST)
@@ -191,6 +185,29 @@ public class ImageController {
         image.setTags(imageTags);
         imageService.update(image);
 
+
+        return "redirect:/images/" + id;
+    }
+
+
+    @RequestMapping(value = "/image/{id}/comments/create")
+    public String creatComment(Model model,
+                               @RequestParam("id") String id,
+                               @RequestParam("comments") String commentText, HttpSession session
+    ) throws IOException {
+        Comment comment = new Comment();
+        comment.setText(commentText);
+        User currUser = (User) session.getAttribute("currUser");
+        comment.setUser(currUser);
+        Image image = imageService.getById(id);
+        comment.setImage(image);
+        imageService.saveComment(comment);
+
+        Set<Comment> commentSet = new HashSet<>();
+        commentSet = image.getComments();
+        commentSet.add(comment);
+        imageService.update(image);
+
         return "redirect:/images/" + id;
     }
 
@@ -199,9 +216,7 @@ public class ImageController {
      * makes it easier for us to store the image data in the datbase
      *
      * @param file the file that we want to convert to base64 encoding
-     *
      * @return base64 encoding of the file that was passed into this function
-     *
      * @throws IOException
      */
     private String convertUploadedFileToBase64(MultipartFile file) throws IOException {
@@ -217,7 +232,6 @@ public class ImageController {
      *                 can be comma delimited to represent multiple Tags
      *                 i.e. "cat, young, kitty" to represent the tags:
      *                 "cat", "young", and "kitty"
-     *
      * @return Tag objects stored in a List
      */
     private List<Tag> findOrCreateTags(String tagNames) {
@@ -226,7 +240,7 @@ public class ImageController {
         List<Tag> tags = new ArrayList<Tag>();
 
         // for each token in the Tokenizer
-        while(st.hasMoreTokens()) {
+        while (st.hasMoreTokens()) {
             // trim any white spaces before or after the String token
             String tagName = st.nextToken().trim();
             // check if the associated Tag has been created and stored in the database
@@ -234,7 +248,7 @@ public class ImageController {
 
             // if the associated Tag has not been created, create the tag
             // and store it in the database
-            if(tag == null) {
+            if (tag == null) {
                 Tag newTag = new Tag(tagName);
                 tag = tagService.createTag(newTag);
             }
@@ -251,13 +265,12 @@ public class ImageController {
      * image edit form
      *
      * @param tags a List of Tag objects
-     *
      * @return A comma delimited, String version of the Tag objects
      */
-    private String convertTagsToString (List<Tag> tags) {
+    private String convertTagsToString(List<Tag> tags) {
         String tagString = "";
 
-        for(int i = 0; i <= tags.size() - 2; i++) {
+        for (int i = 0; i <= tags.size() - 2; i++) {
             tagString += tags.get(i).getName() + ", ";
         }
 
