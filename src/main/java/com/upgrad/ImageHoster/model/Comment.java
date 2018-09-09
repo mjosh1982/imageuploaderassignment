@@ -2,6 +2,9 @@ package com.upgrad.ImageHoster.model;
 
 import javax.persistence.*;
 
+/**
+ * Comment class for storing comment details.
+ */
 @Entity
 @Table(name = "Comment")
 public class Comment {
@@ -15,7 +18,7 @@ public class Comment {
     @Column(columnDefinition = "text")
     private String text;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image image;
 

@@ -1,15 +1,16 @@
 package com.upgrad.ImageHoster.common;
 
+import com.google.common.collect.Lists;
 import com.upgrad.ImageHoster.model.Comment;
 import com.upgrad.ImageHoster.model.Image;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
+import org.hibernate.*;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("unchecked")
 public class ImageManager extends SessionManager {
@@ -20,10 +21,13 @@ public class ImageManager extends SessionManager {
      */
     public List<Image> getAllImages() {
         Session session = openSession();
-        List<Image> images = session.createCriteria(Image.class).list();
+        List<Image> images = session.createCriteria(Image.class)
+                //.setProjection(Projections.projectionList()
+                //         .add(Projections.distinct(Projections.property("id"))))
+                .list();
         commitSession(session);
-
-        return images;
+        Set<Image> imageSet = new HashSet<>(images);
+        return Lists.newArrayList(imageSet);
     }
 
     /**
@@ -40,7 +44,6 @@ public class ImageManager extends SessionManager {
                     .add(Restrictions.eq("id", Integer.valueOf(id)))
                     .uniqueResult(); // retrieves only 1 image
             commitSession(session);
-
             return image;
         } catch (HibernateException e) {
             System.out.println("unable to retrieve an image from database by its title");
@@ -186,5 +189,18 @@ public class ImageManager extends SessionManager {
         Session session = openSession();
         session.save(comment);
         commitSession(session);
+    }
+
+    /**
+     * Method used for deleting comments.
+     *
+     * @param comments list of comments for the image
+     */
+    public void deleteComments(Set<Comment> comments) {
+        for (Comment comObj : comments) {
+            Session session = openSession();
+            session.delete(comObj);
+            commitSession(session);
+        }
     }
 }

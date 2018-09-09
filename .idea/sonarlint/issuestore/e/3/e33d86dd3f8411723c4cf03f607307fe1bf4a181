@@ -1,0 +1,6 @@
+
+psquid:S22932"YReplace the type specification in this constructor call with the diamond operator ("<>").(îÂáÆ
+Hsquid:S1948+"*Make "comments" transient or serializable.(‡¸ÏÚ8¶§û¨Ú,
+~squid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(›•Û¹üÿÿÿÿ8åˆÚÇÙ,
+Dsquid:S19482"&Make "tags" transient or serializable.(îÂáÆ8åˆÚÇÙ,
+Zsquid:UselessImportCheck	"*Remove this unused import 'java.util.Set'.(ö²„¤şÿÿÿÿ8ßƒü¨Ú,

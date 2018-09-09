@@ -6,6 +6,7 @@ import com.upgrad.ImageHoster.model.Image;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -59,5 +60,10 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void saveComment(Comment comment) {
         imageManager.saveComment(comment);
+    }
+
+    @Override
+    public void deleteComments(Set<Comment> comments) {
+        imageManager.deleteComments(comments);
     }
 }

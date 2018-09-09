@@ -36,14 +36,14 @@ public class Image implements Serializable {
     @Column
     private LocalDate uploadDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "image", targetEntity = com.upgrad.ImageHoster.model.Comment.class)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "image")
     private Set<Comment> comments;
 
     // These  annotations creates a join table for many-to-many relationships
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Image_Tag",
             joinColumns = {@JoinColumn(name = "image_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")})

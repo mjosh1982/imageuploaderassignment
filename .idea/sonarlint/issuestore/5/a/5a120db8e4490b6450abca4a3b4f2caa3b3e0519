@@ -1,10 +1,14 @@
 
-T
-squid:S106I"9Replace this use of System.out or System.err by a logger.(±üê·şÿÿÿÿ
+Isquid:S1168g"+Return an empty collection instead of null.(¥¹ï8êúÁ»Ú,
+[
+squid:S106I"9Replace this use of System.out or System.err by a logger.(±üê·şÿÿÿÿ8êúÁ»Ú,
+[
+squid:S106."9Replace this use of System.out or System.err by a logger.(±üê·şÿÿÿÿ8êúÁ»Ú,
+Zsquid:UselessImportCheck"*Remove this unused import 'java.util.Set'.(ö²„¤şÿÿÿÿ8Õª…©Ú,
+[
+squid:S106d"9Replace this use of System.out or System.err by a logger.(±üê·şÿÿÿÿ8êúÁ»Ú,
+šsquid:S1192."wDefine a constant instead of duplicating this literal "unable to retrieve an image from database by its title" 4 times.(±üê·şÿÿÿÿ8êúÁ»Ú,
 rsquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(æ›ò…
-Bsquid:S1168g"+Return an empty collection instead of null.(¥¹ï
-“squid:S1192-"wDefine a constant instead of duplicating this literal "unable to retrieve an image from database by its title" 3 times.(±üê·şÿÿÿÿ
-T
-squid:S106d"9Replace this use of System.out or System.err by a logger.(±üê·şÿÿÿÿ
-T
-squid:S106-"9Replace this use of System.out or System.err by a logger.(±üê·şÿÿÿÿ
+\
+squid:S106®"9Replace this use of System.out or System.err by a logger.(±üê·şÿÿÿÿ8êúÁ»Ú,
+ssquid:UselessImportCheck"CRemove this unused import 'org.hibernate.criterion.ProjectionList'.(¬‘¥Ğşÿÿÿÿ8Ê•”ªÚ,

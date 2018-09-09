@@ -118,11 +118,11 @@ public class ImageController {
         model.addAttribute("user", image.getUser());
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
-        model.addAttribute("id",image.getId());
+        model.addAttribute("id", image.getId());
+
         if (image.getComments() != null && image.getComments().size() > 0) {
             model.addAttribute("comments", image.getComments());
         }
-
         return "images/image";
     }
 
@@ -135,9 +135,8 @@ public class ImageController {
     @RequestMapping("/images/{id}/delete")
     public String deleteImage(@PathVariable String id) {
         Image image = imageService.getById(id);
+        imageService.deleteComments(image.getComments());
         imageService.deleteById(image);
-
-
         return "redirect:/";
     }
 

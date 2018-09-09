@@ -4,6 +4,7 @@ import com.upgrad.ImageHoster.model.Comment;
 import com.upgrad.ImageHoster.model.Image;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ImageService {
     List<Image> getAll();
@@ -23,4 +24,6 @@ public interface ImageService {
     void update(Image image);
 
     void saveComment(Comment comment);
+
+    void deleteComments(Set<Comment> comments);
 }
